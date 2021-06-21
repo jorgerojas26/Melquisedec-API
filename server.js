@@ -11,6 +11,7 @@ const supplier_routes = require("./routes/supplier");
 const category_routes = require("./routes/category");
 const product_routes = require("./routes/product");
 const product_variant_routes = require("./routes/product_variant");
+const currencyRate_routes = require("./routes/currencyRate");
 
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
@@ -38,6 +39,7 @@ app.use("/api/suppliers", supplier_routes);
 app.use("/api/categories", category_routes);
 app.use("/api/products", upload.array("images", 100), product_routes);
 app.use("/api/product_variants", product_variant_routes);
+app.use("/api/currencyRates", currencyRate_routes);
 
 app.use(errorMiddleware);
 

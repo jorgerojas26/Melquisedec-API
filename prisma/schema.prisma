@@ -12,7 +12,7 @@ model client {
   name        String    @db.VarChar(255)
   cedula      String    @unique @db.VarChar(255)
   phoneNumber String?   @db.VarChar(11)
-  createdAt   DateTime? @db.Timestamp(0)
+  createdAt   DateTime? @db.Timestamp(0) 
 }
 
 model user {
@@ -20,7 +20,7 @@ model user {
   username    String   @db.VarChar(255)
   password    String   @db.VarChar(255)
   permissions Int      @db.TinyInt
-  createdAt   DateTime? @db.Timestamp(0)
+  createdAt   DateTime? @db.Timestamp(0) 
 }
 
 model supplier {
@@ -29,19 +29,19 @@ model supplier {
   rif         String   @db.VarChar(15)
   address     String   @db.VarChar(255)
   phoneNumber String   @db.VarChar(11)
-  createdAt   DateTime? @db.Timestamp(0)
+  createdAt   DateTime? @db.Timestamp(0) 
 }
 
 model category {
   id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(255)
-  createdAt DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0) 
 }
 
 model product {
   id                                                             Int                   @id @default(autoincrement())
   name                                                           String                @db.VarChar(255)
-  createdAt                                                      DateTime?              @db.Timestamp(0)
+  createdAt DateTime?                                            @db.Timestamp(0)      
   product_variant                                                product_variant[]
   product_variant_log_productToproduct_variant_log_old_productId product_variant_log[] @relation("productToproduct_variant_log_old_productId")
   product_variant_log                                            product_variant_log[]
@@ -51,12 +51,12 @@ model product_variant {
   id            Int      @id @default(autoincrement())
   productId     Int
   name          String   @db.VarChar(255)
-  price         Float    @db.Float
+  price         Decimal    @db.Decimal(19,2)
   profitPercent Float    @db.Float
   unitValue     Float    @default(1) @db.Float
   stock         Float    @default(0) @db.Float
   imagePath     String?  @db.VarChar(255)
-  createdAt     DateTime? @db.Timestamp(0)
+  createdAt     DateTime? @db.Timestamp(0) 
   product       product  @relation(fields: [productId], references: [id])
 
   @@index([productId], name: "productId")
@@ -69,8 +69,8 @@ model product_variant_log {
   productId                                          Int
   old_name                                           String?  @db.VarChar(255)
   name                                               String   @db.VarChar(255)
-  old_price                                          Float?   @db.Float
-  price                                              Float    @db.Float
+  old_price                                          Decimal? @db.Decimal(19,2)
+  price                                              Decimal  @db.Decimal(19,2)
   old_profitPercent                                  Float?   @db.Float
   profitPercent                                      Float    @db.Float
   old_unitValue                                      Float?   @db.Float
@@ -79,7 +79,7 @@ model product_variant_log {
   stock                                              Float    @db.Float
   imagePath                                          String?  @db.VarChar(255)
   action                                             String   @db.VarChar(255)
-  createdAt                                          DateTime? @db.Timestamp(0)
+  createdAt                                          DateTime? @db.Timestamp(0) 
   product_productToproduct_variant_log_old_productId product? @relation("productToproduct_variant_log_old_productId", fields: [old_productId], references: [id])
   product                                            product  @relation(fields: [productId], references: [id])
 
@@ -92,4 +92,11 @@ model supplying {
   product_variant_id Int
 
   product_variant product_variant @relation(fields: [product_variant_id], references: [id])
+}
+
+model currencyRate {
+  id                 Int @id @default(autoincrement())
+  currency           String  @unique @db.VarChar(3)
+  value              Decimal @db.Decimal(19,2)
+  rounding           Int @default(1)
 }

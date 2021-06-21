@@ -1,0 +1,29 @@
+#+BEGIN_SRC 
+GET http://localhost:5000/api/currencyRates
+Accept: application/json
+#+END_SRC
+
+#+BEGIN_SRC 
+GET http://localhost:5000/api/currencyRates/usd
+Accept: application/json
+#+END_SRC
+
+#+BEGIN_SRC
+POST http://localhost:5000/api/currencyRates
+Content-Type: application/json
+
+{
+"currency": "EUR",
+"value": "0"
+}
+#+END_SRC
+
+#+BEGIN_SRC 
+PATCH http://localhost:5000/api/currencyRates/usd
+Content-Type: application/json
+
+{
+"currency": "USD",
+"value": 2900000
+}
+#+END_SRC
