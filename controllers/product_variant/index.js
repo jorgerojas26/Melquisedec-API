@@ -2,35 +2,31 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const filterHandler = require('./filters');
-const { CONVERT_PRODUCT_PRICE } = require('../../utils/product');
+const { CONVERT_PRODUCT_PRICE, SET_ALL_CURRENCY_PRICES } = require('../../utils/product');
+const { GET_PAGINATED_RESOURCE } = require('../../utils/fetchPaginated');
 
 const GET_PRODUCT_VARIANTS = async (req, res, next) => {
   const { filter } = req.query;
-
   let queryFilters = {};
-
-  let { skip, take } = req.paginationConfig;
 
   if (filter) {
     queryFilters.where = filterHandler(filter);
   }
 
   try {
-    var recordsTotal = await prisma.product_variant.count(queryFilters);
     const currencyRates = await prisma.currencyRate.findMany();
 
-    if (recordsTotal < take) skip = 0;
-
-    var records = await prisma.product_variant.findMany({
-      ...queryFilters,
-      skip,
-      take,
+    let { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
+      model: prisma.product_variant,
+      queryFilters,
+      paginationConfig: req.paginationConfig,
       include: {
         product: {
           include: {
             product_variant: {
               select: {
                 id: true,
+                productId: false,
                 name: true,
                 price: true,
                 profitPercent: true,
@@ -43,28 +39,16 @@ const GET_PRODUCT_VARIANTS = async (req, res, next) => {
           },
         },
       },
-      orderBy: { productId: 'asc' },
     });
 
-    records = records.map((variant) => {
-      currencyRates.forEach((rate) => {
-        let price = CONVERT_PRODUCT_PRICE(variant.price, rate.currency, rate.value, rate.rounding);
-        variant = { ...variant, ...price };
-      });
-      return variant;
-    });
+    records = SET_ALL_CURRENCY_PRICES({ products: records, currencyRates });
+
+    const response = { records: [...records], recordsTotal, pageCount };
+
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
-
-  let pageCount = Math.ceil(recordsTotal / take);
-
-  const response = {
-    records: [...records],
-    recordsTotal,
-    pageCount,
-  };
-  res.json(response);
 };
 
 const CREATE_PRODUCT_VARIANT = async (req, res, next) => {
@@ -95,13 +79,7 @@ const UPDATE_PRODUCT_VARIANT = async (req, res, next) => {
   try {
     const response = await prisma.product_variant.update({
       where: { id: parseInt(id) },
-      data: {
-        name,
-        price,
-        profitPercent,
-        unitValue,
-        imagePath,
-      },
+      data: { name, price, profitPercent, unitValue, imagePath },
     });
     res.status(200).json(response);
   } catch (error) {
@@ -110,6 +88,7 @@ const UPDATE_PRODUCT_VARIANT = async (req, res, next) => {
 };
 
 const DELETE_PRODUCT_VARIANT = async (req, res, next) => {
+  /*
   const { id } = req.params;
 
   try {
@@ -118,6 +97,8 @@ const DELETE_PRODUCT_VARIANT = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+  */
+  res.status(405).json({ error: { message: 'No puedes eliminar un producto', path: null } });
 };
 
 module.exports = {

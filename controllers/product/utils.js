@@ -1,11 +1,10 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 exports.setImagePath = (variantsWithImage, product_variant, req) => {
   let counter = 0;
   const variants = product_variant.map((databaseVariant, index) => {
-    console.log(variantsWithImage[index]);
-    if (variantsWithImage[index] != null && typeof variantsWithImage[index] !== "string") {
+    if (variantsWithImage[index] != null && typeof variantsWithImage[index] !== 'string') {
       databaseVariant.imagePath = `\\productImages\\${req.files[index - counter].filename}`;
     } else {
       counter++;
@@ -22,8 +21,6 @@ exports.productExists = async (id) => {
       product_variant: true,
     },
   });
-
-  console.log("From product exists", product);
 
   return product;
 };

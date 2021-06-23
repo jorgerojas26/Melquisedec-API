@@ -3,39 +3,28 @@ const prisma = new PrismaClient();
 const { setImagePath, productExists, variantsToBeDeleted, setCRUDAction } = require('./utils');
 
 const filterHandler = require('./filters');
+const { GET_PAGINATED_RESOURCE } = require('../../utils/fetchPaginated');
 
 const GET_PRODUCTS = async (req, res, next) => {
   let { filter } = req.query;
-
   let queryFilters = {};
-
-  let { skip, take } = req.paginationConfig;
 
   if (filter) {
     queryFilters.where = filterHandler(filter);
   }
   try {
-    var recordsTotal = await prisma.product.count(queryFilters);
-    if (recordsTotal < take) skip = 0;
-
-    var records = await prisma.product.findMany({
-      skip,
-      take,
+    const { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
+      model: prisma.product,
+      queryFilters,
+      paginationConfig: req.paginationConfig,
       include: { product_variant: true, ...queryFilters },
-      orderBy: { createdAt: 'desc' },
     });
+
+    const response = { records: [...records], recordsTotal, pageCount };
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }
-
-  let pageCount = Math.ceil(recordsTotal / take);
-
-  const response = {
-    records: [...records],
-    recordsTotal,
-    pageCount,
-  };
-  res.json(response);
 };
 
 const GET_PRODUCT = async (req, res, next) => {
@@ -61,12 +50,7 @@ const CREATE_PRODUCT = async (req, res, next) => {
 
   try {
     const response = await prisma.product.create({
-      data: {
-        name,
-        product_variant: {
-          create: product_variant,
-        },
-      },
+      data: { name, product_variant: { create: product_variant } },
     });
     res.status(200).json(response);
   } catch (error) {
@@ -80,17 +64,13 @@ const UPDATE_PRODUCT = async (req, res, next) => {
   name = brand != 'undefined' ? name + ' ' + brand : name;
   product_variant = JSON.parse(product_variant);
   variantsWithImage = JSON.parse(variantsWithImage);
+
   product_variant = setImagePath(variantsWithImage, product_variant, req);
 
   try {
     const product = await productExists(id);
     if (!product) {
-      res.status(404).json({
-        error: {
-          message: 'Este producto no existe',
-          path: undefined,
-        },
-      });
+      res.status(404).json({ error: { message: 'Este producto no existe', path: undefined } });
     } else {
       const allVariants = variantsToBeDeleted(product.product_variant, product_variant);
 
@@ -100,12 +80,7 @@ const UPDATE_PRODUCT = async (req, res, next) => {
 
         response = await prisma.product.update({
           where: { id: parseInt(id) },
-          data: {
-            name,
-            product_variant: {
-              ...crudAction,
-            },
-          },
+          data: { name, product_variant: { ...crudAction } },
         });
       }
       res.status(200).json(response);
@@ -125,12 +100,7 @@ const DELETE_PRODUCT = async (req, res, next) => {
         next(error);
     }
     */
-  res.json({
-    error: {
-      message: 'No puedes eliminar un producto',
-      path: null,
-    },
-  });
+  res.json({ error: { message: 'No puedes eliminar un producto', path: null } });
 };
 
 module.exports = {

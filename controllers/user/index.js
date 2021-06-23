@@ -2,84 +2,75 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const filterHandler = require('./filters');
+const { GET_PAGINATED_RESOURCE } = require('../../utils/fetchPaginated');
 
 const GET_USERS = async (req, res, next) => {
-    const { filter } = req.query;
-    let queryFilters = {};
+  const { filter } = req.query;
+  let queryFilters = {};
 
-    let { skip, take } = req.paginationConfig;
+  if (filter) {
+    queryFilters.where = filterHandler(filter);
+  }
 
-    if (filter) {
-        queryFilters.where = filterHandler(filter);
-    }
-
-    try {
-        var recordsTotal = await prisma.user.count(queryFilters);
-        if (recordsTotal < take) skip = 0;
-
-        var records = await prisma.user.findMany({
-            ...queryFilters,
-            skip,
-            take,
-            orderBy: { createdAt: 'desc' },
-        });
-    } catch (error) {
-        next(error);
-    }
-
-    let pageCount = Math.ceil(recordsTotal / take);
+  try {
+    const { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
+      model: prisma.user,
+      queryFilters,
+      paginationConfig: req.paginationConfig,
+    });
 
     const response = {
-        records: [...records],
-        recordsTotal,
-        pageCount,
+      records: [...records],
+      recordsTotal,
+      pageCount,
     };
-    res.json(response);
+
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const CREATE_USER = async (req, res, next) => {
-    const { username, password, permissions } = req.body;
+  const { username, password, permissions } = req.body;
 
-    try {
-        const response = await prisma.user.create({ data: { username, password, permissions } });
-        res.status(200).json(response);
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const response = await prisma.user.create({ data: { username, password, permissions } });
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const UPDATE_USER = async (req, res, next) => {
-    const { id } = req.params;
-    const { username, permissions } = req.body;
+  const { id } = req.params;
+  const { username, permissions } = req.body;
 
-    try {
-        const response = await prisma.user.update({
-            where: { id: parseInt(id) },
-            data: {
-                username,
-                permissions,
-            },
-        });
-        res.status(200).json(response);
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const response = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: { username, permissions },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const DELETE_USER = async (req, res, next) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        let response = await prisma.user.delete({ where: { id: parseInt(id) } });
-        res.status(201).json(response);
-    } catch (error) {
-        next(error);
-    }
+  try {
+    let response = await prisma.user.delete({ where: { id: parseInt(id) } });
+    res.status(201).json(response);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
-    GET_USERS,
-    CREATE_USER,
-    UPDATE_USER,
-    DELETE_USER,
+  GET_USERS,
+  CREATE_USER,
+  UPDATE_USER,
+  DELETE_USER,
 };

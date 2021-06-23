@@ -1,7 +1,7 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-const filterHandler = require("./filter");
+const filterHandler = require('./filter');
 
 const GET_CURRENCY_RATES = async (req, res, next) => {
   let { filter } = req.query;
@@ -13,9 +13,7 @@ const GET_CURRENCY_RATES = async (req, res, next) => {
   }
 
   try {
-    var records = await prisma.currencyRate.findMany({
-      ...queryFilters,
-    });
+    var records = await prisma.currencyRate.findMany({ ...queryFilters });
 
     res.status(200).json(records);
   } catch (error) {
@@ -33,11 +31,7 @@ const GET_CURRENCY_RATE = async (req, res, next) => {
     if (currencyRate) {
       res.status(200).json(currencyRate);
     } else {
-      res.status(404).json({
-        error: {
-          message: "Currency not found",
-        },
-      });
+      res.status(404).json({ error: { message: 'Currency not found' } });
     }
   } catch (error) {
     next(error);

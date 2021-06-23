@@ -17,7 +17,7 @@ model client {
 
 model user {
   id          Int      @id @default(autoincrement())
-  username    String   @db.VarChar(255)
+  username    String   @unique @db.VarChar(255)
   password    String   @db.VarChar(255)
   permissions Int      @db.TinyInt
   createdAt   DateTime? @db.Timestamp(0) 

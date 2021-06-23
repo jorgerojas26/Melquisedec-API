@@ -1,0 +1,4 @@
+#+BEGIN_SRC 
+GET http://localhost:5000/api/products
+Accept: application/json
+#+END_SRC
