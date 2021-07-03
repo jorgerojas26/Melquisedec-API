@@ -1,10 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { CALCULATE_PROFIT_PERCENT } = require('../../utils/product');
 
 exports.setImagePath = (variantsWithImage, product_variant, req) => {
   let counter = 0;
   const variants = product_variant.map((databaseVariant, index) => {
-    if (variantsWithImage[index] != null && typeof variantsWithImage[index] !== 'string') {
+    if (variantsWithImage[index] != -1 && typeof variantsWithImage[index] !== 'string') {
       databaseVariant.imagePath = `\\productImages\\${req.files[index - counter].filename}`;
     } else {
       counter++;
@@ -72,4 +73,44 @@ exports.setCRUDAction = (variant) => {
     ...update,
     ...del,
   };
+};
+
+exports.isNewStockGreater = (variantsFromDatabase, variantsFromRequest) => {
+  let databaseStock = 0;
+  let requestStock = 0;
+
+  variantsFromDatabase.map((variant) => {
+    if (variant.stock) databaseStock += variant.stock * variant.unitValue;
+  });
+
+  variantsFromRequest.map((variant) => {
+    if (variant.stock) requestStock += variant.stock * variant.unitValue;
+  });
+
+  return requestStock > databaseStock;
+};
+
+exports.recalculateProfitPercent = (variantFromRequest, lastSupplying) => {
+  const price = variantFromRequest.price;
+  const buyPrice = parseFloat(lastSupplying.buyPrice);
+  const newProfitPercent = CALCULATE_PROFIT_PERCENT(price, buyPrice);
+
+  return newProfitPercent !== null ? newProfitPercent : variantFromRequest.profitPercent;
+};
+
+exports.sanitizeVariants = (variantsArray) => {
+  if (variantsArray) {
+    return variantsArray.map((variant) => {
+      return {
+        id: variant.id,
+        productId: variant.productId,
+        name: variant.name,
+        price: variant.price,
+        unitValue: variant.unitValue,
+        stock: variant.stock,
+        imagePath: variant.imagePath,
+      };
+    });
+  }
+  return [];
 };

@@ -2,3 +2,9 @@
 GET http://localhost:5000/api/products
 Accept: application/json
 #+END_SRC
+
+
+#+BEGIN_SRC 
+GET http://localhost:5000/api/product_variants/3/supplyings
+Accept: application/json
+#+END_SRC

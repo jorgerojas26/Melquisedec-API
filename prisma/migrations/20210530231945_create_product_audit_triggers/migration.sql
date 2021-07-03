@@ -18,3 +18,4 @@ CREATE TRIGGER `insertLog` AFTER INSERT ON `product_variant`
 
 CREATE TRIGGER `updateLog` AFTER UPDATE ON `product_variant`
  FOR EACH ROW INSERT INTO product_variant_log VALUES(null, OLD.productId, NEW.productId, OLD.name, NEW.name, OLD.price, NEW.price, OLD.profitPercent, NEW.profitPercent, OLD.unitValue, NEW.unitValue, OLD.stock, NEW.stock, NEW.imagePath, "updated", CURRENT_TIMESTAMP());
+

@@ -1,0 +1,16 @@
+#+BEGIN_SRC 
+GET http://localhost:5000/api/supplyings
+Accept: application/json
+#+END_SRC
+
+#+BEING_SRC
+POST http://localhost:5000/api/supplyings
+Content-Type: application/json
+
+{
+"product_variant_id": 2,
+"supplierId": 1,
+"buyPrice": 1.5243,
+"quantity": 15
+}
+#+END_SRC

@@ -2,17 +2,11 @@ const filterHandler = (filter) => {
   let condition = {};
 
   let idFilter = {};
-  let priceFilter = {};
 
   if (!isNaN(filter)) {
     idFilter = {
       id: {
         equals: parseInt(filter),
-      },
-    };
-    priceFilter = {
-      price: {
-        equals: parseFloat(filter),
       },
     };
   }
@@ -21,14 +15,18 @@ const filterHandler = (filter) => {
     OR: [
       idFilter,
       {
-        name: { contains: filter },
-      },
-      priceFilter,
-      {
-        product: {
-          OR: [idFilter, { name: { contains: filter } }, { brand: { contains: filter } }],
+        product_variant: {
+          OR: [
+            { name: { contains: filter } },
+            {
+              product: {
+                OR: [{ name: { contains: filter } }, { brand: { contains: filter } }],
+              },
+            },
+          ],
         },
       },
+      { supplier: { name: { contains: filter } } },
     ],
   };
 

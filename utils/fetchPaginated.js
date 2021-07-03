@@ -1,7 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-
-exports.GET_PAGINATED_RESOURCE = async ({ model, queryFilters, paginationConfig, include }) => {
+exports.GET_PAGINATED_RESOURCE = async ({ model, queryFilters, paginationConfig, include, select }) => {
   let { skip, take } = paginationConfig;
 
   let recordsTotal = await model.count(queryFilters);
@@ -11,8 +8,9 @@ exports.GET_PAGINATED_RESOURCE = async ({ model, queryFilters, paginationConfig,
     ...queryFilters,
     skip,
     take,
-    orderBy: { createdAt: 'desc' },
+    orderBy: { id: 'desc' },
     include,
+    select,
   });
 
   const pageCount = Math.ceil(recordsTotal / take);
