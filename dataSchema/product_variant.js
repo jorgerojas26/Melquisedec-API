@@ -5,10 +5,10 @@ const schema = Joi.object().keys({
   name: Joi.string().required().messages({
     'string.empty': 'El campo nombre es requerido',
   }),
-  price: Joi.number().required().messages({
+  price: Joi.number().min(0).required().messages({
     'number.empty': 'El campo precio es requerido',
   }),
-  unitValue: Joi.number().required().messages({
+  unitValue: Joi.number().min(0).required().messages({
     'number.empty': 'El campo valor unidad es requerido',
   }),
   imagePath: Joi.string().allow(null).allow(''),

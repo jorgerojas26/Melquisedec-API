@@ -1,0 +1,67 @@
+Info 0    [13:02:08.016] Starting TS Server
+Info 1    [13:02:08.016] Version: 4.3.2
+Info 2    [13:02:08.016] Arguments: /usr/local/bin/node /usr/local/bin/tsserver --logFile /home/macarrones/Projects/Melquisedec-API/.log/tsserver.log --logVerbosity info --cancellationPipeName /tmp/e45b418f86ad01b363f351e6df641d20/tscancellation*
+Info 3    [13:02:08.016] Platform: linux NodeVersion: 14 CaseSensitive: true
+Info 4    [13:02:08.016] ServerMode: undefined syntaxOnly: false hasUnknownServerMode: undefined
+Info 5    [13:02:08.028] Search path: /home/macarrones/Projects/Melquisedec-API/routes
+Info 6    [13:02:08.028] For info: /home/macarrones/Projects/Melquisedec-API/routes/sale.js :: No config files found.
+Info 7    [13:02:08.032] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 8    [13:02:09.243] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed: 1211.45023599267ms
+Info 9    [13:02:09.243] Project '/dev/null/inferredProject1*' (Inferred)
+Info 10   [13:02:09.243] 	Files (105)
+
+Info 11   [13:02:09.243] -----------------------------------------------
+Info 12   [13:02:09.256] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info 13   [13:02:09.259] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true Elapsed: 3.2293500006198883ms
+Info 14   [13:02:09.259] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 15   [13:02:09.259] 	Files (1)
+
+Info 16   [13:02:09.259] -----------------------------------------------
+Info 17   [13:02:10.666] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/bindings 0:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 18   [13:02:10.666] Elapsed:: 0.20649099349975586ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/bindings 0:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 19   [13:02:10.666] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/file-uri-to-path 1:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 20   [13:02:10.667] Elapsed:: 0.040716975927352905ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/file-uri-to-path 1:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 21   [13:02:10.667] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/fsevents 2:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 22   [13:02:10.667] Elapsed:: 0.03487500548362732ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/fsevents 2:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 23   [13:02:10.667] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/nan 3:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 24   [13:02:10.667] Elapsed:: 0.030299991369247437ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/nan 3:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 25   [13:02:10.667] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/fsevents 4:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 26   [13:02:10.667] Elapsed:: 0.02449098229408264ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/fsevents 4:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 27   [13:02:10.667] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/bindings 5:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 28   [13:02:10.667] Elapsed:: 0.023514986038208008ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/bindings 5:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 29   [13:02:10.667] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/nan 6:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 30   [13:02:10.667] Elapsed:: 0.03143399953842163ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/nan 6:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 31   [13:02:10.667] DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/file-uri-to-path 7:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 32   [13:02:10.667] Elapsed:: 0.027214020490646362ms DirectoryWatcher:: Triggered with /home/macarrones/.cache/typescript/4.3/node_modules/file-uri-to-path 7:: WatchInfo: /home/macarrones/.cache/typescript/4.3/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 33   [13:02:20.304] Search path: /home/macarrones/Projects/Melquisedec-API/dataSchema
+Info 34   [13:02:20.305] For info: /home/macarrones/Projects/Melquisedec-API/dataSchema/sale.js :: No config files found.
+Info 35   [13:02:20.333] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 36   [13:02:20.338] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false Elapsed: 5.1095729768276215ms
+Info 37   [13:02:20.338] Different program with same set of files:: structureIsReused:: 2
+Info 38   [13:02:34.135] Search path: /home/macarrones/Projects/Melquisedec-API/dataSchema
+Info 39   [13:02:34.135] For info: /home/macarrones/Projects/Melquisedec-API/dataSchema/supplying.js :: No config files found.
+Info 40   [13:02:34.136] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info 41   [13:02:34.142] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true Elapsed: 6.150593012571335ms
+Info 42   [13:02:34.142] Project '/dev/null/inferredProject2*' (Inferred)
+Info 43   [13:02:34.142] 	Files (20)
+
+Info 44   [13:02:34.142] -----------------------------------------------
+Info 45   [13:02:34.163] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
+Info 46   [13:02:34.315] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* Version: 1 structureChanged: true Elapsed: 151.87563300132751ms
+Info 47   [13:02:34.315] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
+Info 48   [13:02:34.315] 	Files (4)
+
+Info 49   [13:02:34.315] -----------------------------------------------
+Info 50   [13:02:34.317] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info 51   [13:02:34.321] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 2 structureChanged: false Elapsed: 4.053710013628006ms
+Info 52   [13:02:34.321] Different program with same set of files:: structureIsReused:: 2
+Info 53   [13:03:01.686] DirectoryWatcher:: Triggered with /home/macarrones/Projects/Melquisedec-API/controllers :: WatchInfo: /home/macarrones/Projects/Melquisedec-API/controllers 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 54   [13:03:01.686] Elapsed:: 0.14172399044036865ms DirectoryWatcher:: Triggered with /home/macarrones/Projects/Melquisedec-API/controllers :: WatchInfo: /home/macarrones/Projects/Melquisedec-API/controllers 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 55   [13:03:02.944] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 56   [13:03:02.995] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true Elapsed: 50.70957699418068ms
+Info 57   [13:03:02.995] Different program with same set of files:: structureIsReused:: 1
+Info 58   [13:03:05.193] Before ensureProjectForOpenFiles:
+Info 59   [13:03:05.193] After ensureProjectForOpenFiles:
+Info 60   [13:03:05.194] got projects updated in background, updating diagnostics for /home/macarrones/Projects/Melquisedec-API/routes/sale.js,/home/macarrones/Projects/Melquisedec-API/dataSchema/sale.js,/home/macarrones/Projects/Melquisedec-API/dataSchema/supplying.js
+Info 61   [13:03:05.700] DirectoryWatcher:: Triggered with /home/macarrones/Projects/Melquisedec-API/controllers/sale/index.js 0:: WatchInfo: /home/macarrones/Projects/Melquisedec-API/controllers 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 62   [13:03:05.701] Elapsed:: 0.29193899035453796ms DirectoryWatcher:: Triggered with /home/macarrones/Projects/Melquisedec-API/controllers/sale/index.js 0:: WatchInfo: /home/macarrones/Projects/Melquisedec-API/controllers 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations

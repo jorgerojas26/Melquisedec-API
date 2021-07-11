@@ -13,6 +13,7 @@ model client {
   cedula      String    @unique @db.VarChar(255)
   phoneNumber String?   @db.VarChar(11)
   createdAt   DateTime? @db.Timestamp(0)
+  sale        sale[]
 }
 
 model user {
@@ -40,10 +41,11 @@ model category {
 }
 
 model product {
-  id                                                             Int                   @id @default(autoincrement())
-  name                                                           String                @db.VarChar(255)
-  brand                                                          String                @db.VarChar(255)
-  createdAt                                                      DateTime?             @db.Timestamp(0)
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  brand     String    @db.VarChar(255)
+  createdAt DateTime? @db.Timestamp(0)
+
   product_variant                                                product_variant[]
   product_variant_log_productToproduct_variant_log_old_productId product_variant_log[] @relation("productToproduct_variant_log_old_productId")
   product_variant_log                                            product_variant_log[]
@@ -54,14 +56,15 @@ model product_variant {
   productId     Int
   name          String    @db.VarChar(255)
   price         Decimal   @db.Decimal(19, 4)
-  profitPercent Decimal   @db.Decimal(10,4) @default(30)
+  profitPercent Decimal   @default(30) @db.Decimal(10, 4)
   unitValue     Float     @default(1) @db.Float
-  stock         Decimal?   @db.Decimal(10, 4) @default(0)
+  stock         Decimal?  @default(0) @db.Decimal(10, 4)
   imagePath     String?   @db.VarChar(255)
   createdAt     DateTime? @db.Timestamp(0)
   product       product   @relation(fields: [productId], references: [id])
 
-  supplying supplying[]
+  supplying    supplying[]
+  sale_product sale_product[]
   @@index([productId], name: "productId")
 }
 
@@ -77,7 +80,7 @@ model product_variant_log {
   profitPercent                                      Float     @db.Float
   old_unitValue                                      Float?    @db.Float
   unitValue                                          Float     @db.Float
-  old_stock                                          Decimal?   @db.Decimal(10, 4)
+  old_stock                                          Decimal?  @db.Decimal(10, 4)
   stock                                              Decimal   @db.Decimal(10, 4)
   imagePath                                          String?   @db.VarChar(255)
   action                                             String    @db.VarChar(255)
@@ -90,11 +93,11 @@ model product_variant_log {
 }
 
 model supplying {
-  id                 Int @id @default(autoincrement())
+  id                 Int       @id @default(autoincrement())
   product_variant_id Int
   supplierId         Int
-  buyPrice           Decimal @db.Decimal(19,4)
-  quantity           Decimal @db.Decimal(10,4)
+  buyPrice           Decimal   @db.Decimal(19, 4)
+  quantity           Decimal   @db.Decimal(10, 4)
   createdAt          DateTime? @db.Timestamp(0)
 
   supplier        supplier        @relation(fields: [supplierId], references: [id])
@@ -107,4 +110,41 @@ model currencyRate {
   value    Decimal @db.Decimal(19, 4)
   rounding Int     @default(1)
 }
-  
+
+model sale {
+  id             Int       @id @default(autoincrement())
+  clientId       Int?
+  totalAmount    Decimal   @db.Decimal(19, 4)
+  status         Boolean   @default(false)
+  createdAt      DateTime? @db.Timestamp(0)
+  currencyRates  sale_currency_rate[]
+  products       sale_product[]
+
+  client         client? @relation(fields: [clientId], references: [id])
+
+}
+
+model sale_currency_rate {
+  id       Int     @id @default(autoincrement())
+  saleId   Int    
+  currency String  @db.VarChar(3)
+  value    Decimal @db.Decimal(19, 4)
+  rounding Int     @default(1)
+  createdAt DateTime? @db.Timestamp(0)
+
+  sale     sale  @relation(fields: [saleId], references: [id])
+}
+
+model sale_product {
+  id                 Int       @id @default(autoincrement())
+  saleId             Int       
+  product_variant_id Int       
+  price              Decimal   @db.Decimal(19, 4)
+  quantity           Decimal   @db.Decimal(10, 4)
+  profitPercent      Decimal   @db.Decimal(10, 4)
+  createdAt          DateTime? @db.Timestamp(0)
+
+  sale               sale            @relation(fields: [saleId], references: [id])
+  product_variant    product_variant @relation(fields: [product_variant_id], references:[id])
+
+}

@@ -3,6 +3,7 @@ const createClients = require('./seeds/clients');
 const createCategories = require('./seeds/categories');
 const createCurrencyRates = require('./seeds/currencyRate');
 const createProducts = require('./seeds/products');
+const createSales = require('./seeds/sales');
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -13,8 +14,7 @@ async function main() {
   await createCategories();
   await createCurrencyRates();
   await createProducts();
-
-  //await prisma.$queryRaw("insert into client values(null, 'Ramon castro', '25664799', '04124192604', null)");
+  await createSales();
 }
 
 main()

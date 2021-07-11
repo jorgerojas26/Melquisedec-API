@@ -9,7 +9,7 @@ const schema = Joi.object().keys({
     'string.min': 'La contraseña debe tener como mínimo 4 caracteres',
     'string.max': 'La contraseña debe tener como máximo 20 caracteres',
   }),
-  permissions: Joi.number().required().min(1).max(4).messages({
+  permissions: Joi.number().required().min(1).max(2).messages({
     'number.min': 'El valor del campo permiso es inválido',
     'number.max': 'El valor del campo permiso es inválido',
   }),
