@@ -41,4 +41,9 @@ CREATE TRIGGER `setCurrencyRatesOnSaleInsert`
   INSERT INTO `sale_currency_rate` (saleId, currency, value, rounding)
   SELECT NEW.id, currency, value, rounding FROM `currencyRate`;
 
-CREATE TRIGGER `setSale`
+CREATE TRIGGER `setSaleProductProfitPercentOnInsert`
+  BEFORE INSERT
+  ON `sale_product` FOR EACH ROW
+                      BEGIN
+                        DECLARE profitPercent DECIMAL (10,4)
+                      END;

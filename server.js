@@ -13,16 +13,17 @@ const product_routes = require('./routes/product');
 const product_variant_routes = require('./routes/product_variant');
 const currencyRate_routes = require('./routes/currencyRate');
 const supplying_routes = require('./routes/supplying');
+const sale_routes = require('./routes/sale');
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
 var storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, path.join(__dirname, 'client', 'build', 'productImages'));
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.originalname);
-  },
+    destination: function (req, file, callback) {
+        callback(null, path.join(__dirname, 'client', 'build', 'productImages'));
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname);
+    },
 });
 var upload = multer({ storage });
 
@@ -39,9 +40,10 @@ app.use('/api/products', upload.array('images', 100), product_routes);
 app.use('/api/product_variants', product_variant_routes);
 app.use('/api/currencyRates', currencyRate_routes);
 app.use('/api/supplyings', supplying_routes);
+app.use('/api/sales', sale_routes);
 
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log('Server running in port: ' + process.env.PORT || 5000);
+    console.log('Server running in port: ' + process.env.PORT || 5000);
 });

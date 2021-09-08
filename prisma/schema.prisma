@@ -115,7 +115,7 @@ model sale {
   id             Int       @id @default(autoincrement())
   clientId       Int?
   totalAmount    Decimal   @db.Decimal(19, 4)
-  status         Boolean   @default(false)
+  status         Int @db.TinyInt() @default(0)
   createdAt      DateTime? @db.Timestamp(0)
   currencyRates  sale_currency_rate[]
   products       sale_product[]
@@ -147,4 +147,13 @@ model sale_product {
   sale               sale            @relation(fields: [saleId], references: [id])
   product_variant    product_variant @relation(fields: [product_variant_id], references:[id])
 
+}
+
+model arbitrary_stock_change {
+  id                 Int       @id @default(autoincrement())
+  product_variant_id Int
+  old_stock          Decimal   @db.Decimal(10, 4)
+  new_stock          Decimal   @db.Decimal(10, 4)
+  reasons            String    @db.VarChar(255)
+  createdAt          DateTime? @db.Timestamp(0)
 }
