@@ -1,4 +1,4 @@
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 10;
 
 const paginate = (req, res, next) => {
     let { page = 1, count = PAGE_SIZE } = req.query;

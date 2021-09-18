@@ -13,12 +13,12 @@ CREATE TABLE `supplying` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `currencyRate` (
+CREATE TABLE `currency_rate` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `currency` VARCHAR(3) NOT NULL,
+    `currency` VARCHAR(20) NOT NULL,
     `value` DECIMAL(19, 4) NOT NULL,
     `rounding` INTEGER NOT NULL DEFAULT 1,
 
-    UNIQUE INDEX `currencyRate.currency_unique`(`currency`),
+    UNIQUE INDEX `currency_rate.currency_unique`(`currency`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

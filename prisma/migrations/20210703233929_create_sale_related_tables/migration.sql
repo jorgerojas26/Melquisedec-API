@@ -12,7 +12,7 @@ CREATE TABLE `sale` (
 CREATE TABLE `sale_currency_rate` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `saleId` INTEGER NOT NULL,
-    `currency` VARCHAR(3) NOT NULL,
+    `currency` VARCHAR(20) NOT NULL,
     `value` DECIMAL(19, 4) NOT NULL,
     `rounding` INTEGER NOT NULL DEFAULT 1,
     `createdAt` TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP(0),
@@ -39,11 +39,11 @@ CREATE TRIGGER `setCurrencyRatesOnSaleInsert`
   AFTER INSERT
   ON `sale` FOR EACH ROW
   INSERT INTO `sale_currency_rate` (saleId, currency, value, rounding)
-  SELECT NEW.id, currency, value, rounding FROM `currencyRate`;
+  SELECT NEW.id, currency, value, rounding FROM `currency_rate`;
 
-CREATE TRIGGER `setSaleProductProfitPercentOnInsert`
-  BEFORE INSERT
-  ON `sale_product` FOR EACH ROW
-                      BEGIN
-                        DECLARE profitPercent DECIMAL (10,4)
-                      END;
+CREATE TRIGGER `subtractProductStockOnInsert`
+    AFTER INSERT
+    ON `sale_product` FOR EACH ROW
+    UPDATE `product_variant`
+    SET stock = stock - NEW.quantity
+    WHERE id = NEW.product_variant_id;

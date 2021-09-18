@@ -21,7 +21,7 @@ const GET_PRODUCTS = async (req, res, next) => {
         queryFilters.where = filterHandler(filter);
     }
     try {
-        const currencyRates = await prisma.currencyRate.findMany();
+        const currencyRates = await prisma.currency_rate.findMany();
 
         let { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
             model: prisma.product,

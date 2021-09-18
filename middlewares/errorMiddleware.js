@@ -48,12 +48,14 @@ const GET_ERROR = {
 const errorMiddleware = (error, req, res, next) => {
     const unknownError = {
         message: 'Error desconocido...',
+        ...error,
     };
     console.log(error);
 
     if (error instanceof PrismaClientValidationError) {
         error.code = 'VALIDATION_ERROR';
     }
+
     res.status(error.statusCode || 500).json({ error: GET_ERROR[error.code] ? GET_ERROR[error.code](error) : unknownError });
 };
 

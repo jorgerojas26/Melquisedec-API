@@ -5,6 +5,7 @@ CREATE TABLE `product` (
     `brand` VARCHAR(255) NOT NULL,
     `createdAt` TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP(0),
 
+    UNIQUE INDEX `product.name.unique`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

@@ -4,6 +4,54 @@ const prisma = new PrismaClient();
 const filterHandler = require('./filters');
 const { SET_ALL_CURRENCY_PRICES } = require('../../utils/product');
 const { GET_PAGINATED_RESOURCE } = require('../../utils/fetchPaginated');
+const { convertMySQLDecimalToNumber } = require('../../utils/convertToNumber');
+
+const fetch_product_variants_in = async (ids_array) => {
+    const currencyRates = await prisma.currency_rate.findMany();
+
+    let records = await prisma.product_variant.findMany({
+        where: { id: { in: ids_array } },
+        include: { product: true },
+    });
+
+    records = convertMySQLDecimalToNumber(records);
+    records = SET_ALL_CURRENCY_PRICES({ products: records, currencyRates });
+    return records;
+};
+
+const fetch_paginated_product_variants = async ({ queryFilters = {}, paginationConfig = {} }) => {
+    const currencyRates = await prisma.currency_rate.findMany();
+
+    let { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
+        model: prisma.product_variant,
+        queryFilters,
+        paginationConfig: paginationConfig,
+        include: {
+            product: {
+                include: {
+                    product_variant: {
+                        select: {
+                            id: true,
+                            productId: false,
+                            name: true,
+                            price: true,
+                            profitPercent: true,
+                            unitValue: true,
+                            stock: true,
+                            imagePath: true,
+                            createdAt: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    records = convertMySQLDecimalToNumber(records);
+    records = SET_ALL_CURRENCY_PRICES({ products: records, currencyRates });
+
+    return { records, recordsTotal, pageCount };
+};
 
 const GET_PRODUCT_VARIANTS = async (req, res, next) => {
     const { filter } = req.query;
@@ -14,35 +62,10 @@ const GET_PRODUCT_VARIANTS = async (req, res, next) => {
     }
 
     try {
-        const currencyRates = await prisma.currencyRate.findMany();
-
-        let { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
-            model: prisma.product_variant,
+        const { records, recordsTotal, pageCount } = await fetch_paginated_product_variants({
             queryFilters,
             paginationConfig: req.paginationConfig,
-            include: {
-                product: {
-                    include: {
-                        product_variant: {
-                            select: {
-                                id: true,
-                                productId: false,
-                                name: true,
-                                price: true,
-                                profitPercent: true,
-                                unitValue: true,
-                                stock: true,
-                                imagePath: true,
-                                createdAt: true,
-                            },
-                        },
-                    },
-                },
-            },
         });
-
-        records = SET_ALL_CURRENCY_PRICES({ products: records, currencyRates });
-
         const response = { records: [...records], recordsTotal, pageCount };
 
         res.status(200).json(response);
@@ -60,7 +83,7 @@ const GET_PRODUCT_VARIANT_BY_ID = async (req, res, next) => {
             include: { product: true },
         });
 
-        const currencyRates = await prisma.currencyRate.findMany();
+        const currencyRates = await prisma.currency_rate.findMany();
 
         product = SET_ALL_CURRENCY_PRICES({ products: [product], currencyRates });
         res.json(product[0]);
@@ -154,4 +177,5 @@ module.exports = {
     CREATE_PRODUCT_VARIANT,
     DELETE_PRODUCT_VARIANT,
     GET_SUPPLYINGS,
+    fetch_product_variants_in,
 };
