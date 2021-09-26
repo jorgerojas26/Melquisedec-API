@@ -1,5 +1,5 @@
 const { groupArrayBy } = require('../../utils/array');
-const { GET_PRODUCT_VARIANT_NAME } = require('../../utils/product');
+const { GET_PRODUCT_VARIANT_NAME, CONVERT_AMOUNT_TO_CURRENCY_RATE } = require('../../utils/product');
 
 const calculate_payment_total = (paymentsArray = [], currencyRates) => {
     const paymentsGroupedByName = groupArrayBy(paymentsArray, 'name');
@@ -9,9 +9,20 @@ const calculate_payment_total = (paymentsArray = [], currencyRates) => {
 
         paymentsGroupedByName[key] = paymentsInfo.reduce((accumulator, payment) => {
             if ((payment.currency && payment.currency === 'VES') || !payment.currency) {
-                accumulator += payment.isChange ? -payment.amount || 0 : payment.amount || 0;
+                accumulator += payment.isChange ? -Number(payment.amount) || 0 : Number(payment.amount) || 0;
             } else if (payment.currency && payment.currency === 'USD') {
-                accumulator += (payment.isChange ? -payment.amount || 0 : payment.amount || 0) * (currencyRates['SYSTEM_USD'].value || 0);
+                accumulator += CONVERT_AMOUNT_TO_CURRENCY_RATE(
+                    payment.isChange ? -payment.amount || 0 : payment.amount || 0,
+                    currencyRates['SYSTEM_USD'].value || 0,
+                    currencyRates['SYSTEM_USD'].rounding || 1
+                );
+                console.log(
+                    CONVERT_AMOUNT_TO_CURRENCY_RATE(
+                        payment.isChange ? -payment.amount || 0 : payment.amount || 0,
+                        currencyRates['SYSTEM_USD'].value || 0,
+                        currencyRates['SYSTEM_USD'].rounding || 1
+                    )
+                );
             }
             return accumulator;
         }, 0);

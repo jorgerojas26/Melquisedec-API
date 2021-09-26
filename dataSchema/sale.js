@@ -13,25 +13,30 @@ const schema = Joi.object().keys({
         .items(
             Joi.alternatives().try(
                 Joi.object().keys({
-                    id: Joi.number().disallow(null).required(),
-                    name: Joi.string().disallow(null).required(),
-                    amount: Joi.number().disallow(null).required(),
-                    isChange: Joi.boolean().disallow(null).required(),
+                    id: Joi.number().required(),
+                    payment_method_id: Joi.number().required(),
+                    name: Joi.string().required(),
+                    amount: Joi.number().required(),
+                    currency: Joi.string().required(),
+                    isChange: Joi.boolean().required(),
                 }),
                 Joi.object().keys({
-                    id: Joi.number().disallow(null).required(),
-                    name: Joi.string().disallow(null).required(),
-                    amount: Joi.number().disallow(null).required(),
-                    isChange: Joi.boolean().disallow(null).required(),
-                    currency: Joi.string().disallow(null).required(),
+                    id: Joi.number().required(),
+                    payment_method_id: Joi.number().required(),
+                    name: Joi.string().required(),
+                    amount: Joi.number().required(),
+                    isChange: Joi.boolean().required(),
+                    currency: Joi.string().required(),
                 }),
                 Joi.object().keys({
-                    id: Joi.number().disallow(null).required(),
-                    name: Joi.string().disallow(null).required(),
-                    amount: Joi.number().disallow(null).required(),
-                    bankId: Joi.number().disallow(null).required(),
-                    code: Joi.number().disallow(null).required(),
-                    isChange: Joi.boolean().disallow(null).required(),
+                    id: Joi.number().required(),
+                    payment_method_id: Joi.number().required(),
+                    name: Joi.string().required(),
+                    amount: Joi.number().required(),
+                    currency: Joi.string().required(),
+                    bankId: Joi.number().required(),
+                    transaction_code: Joi.string().required(),
+                    isChange: Joi.boolean().required(),
                 })
             )
         )
@@ -39,6 +44,7 @@ const schema = Joi.object().keys({
         .messages({ 'alternatives.match': 'La información de pago es incorrecta' }),
     status: Joi.number().allow(null),
     saveAsDebt: Joi.boolean().required(),
+    paying_debts: Joi.array().items(Joi.number()).allow(null),
 });
 
 module.exports = schema;

@@ -65,7 +65,6 @@ model product_variant {
 
   supplying    supplying[]
   sale_product sale_product[]
-  @@index([productId], name: "productId")
 }
 
 model product_variant_log {
@@ -87,9 +86,6 @@ model product_variant_log {
   createdAt                                          DateTime? @db.Timestamp(0)
   product_productToproduct_variant_log_old_productId product?  @relation("productToproduct_variant_log_old_productId", fields: [old_productId], references: [id])
   product                                            product   @relation(fields: [productId], references: [id])
-
-  @@index([old_productId], name: "old_productId")
-  @@index([productId], name: "productId")
 }
 
 model supplying {
@@ -112,40 +108,41 @@ model currency_rate {
 }
 
 model sale {
-  id             Int       @id @default(autoincrement())
-  clientId       Int?
-  totalAmount    Decimal   @db.Decimal(19, 4)
-  status         Int @db.TinyInt() @default(0)
-  createdAt      DateTime? @db.Timestamp(0)
-  currencyRates  sale_currency_rate[]
-  products       sale_product[]
+  id            Int                  @id @default(autoincrement())
+  clientId      Int?
+  totalAmount   Decimal              @db.Decimal(19, 4)
+  status        Int                  @default(0) @db.TinyInt
+  createdAt     DateTime?            @db.Timestamp(0)
+  currencyRates sale_currency_rate[]
+  products      sale_product[]
 
-  client         client? @relation(fields: [clientId], references: [id])
-  debt           debt?
+  client  client?   @relation(fields: [clientId], references: [id])
+  debt    debt?
+  payment payment[]
 }
 
 model sale_currency_rate {
-  id       Int     @id @default(autoincrement())
-  saleId   Int    
-  currency String  @db.VarChar(20)
-  value    Decimal @db.Decimal(19, 4)
-  rounding Int     @default(1)
+  id        Int       @id @default(autoincrement())
+  saleId    Int
+  currency  String    @db.VarChar(20)
+  value     Decimal   @db.Decimal(19, 4)
+  rounding  Int       @default(1)
   createdAt DateTime? @db.Timestamp(0)
 
-  sale     sale  @relation(fields: [saleId], references: [id])
+  sale sale @relation(fields: [saleId], references: [id])
 }
 
 model sale_product {
   id                 Int       @id @default(autoincrement())
-  saleId             Int       
-  product_variant_id Int       
+  saleId             Int
+  product_variant_id Int
   price              Decimal   @db.Decimal(19, 4)
   quantity           Decimal   @db.Decimal(10, 4)
   profitPercent      Decimal   @db.Decimal(10, 4)
   createdAt          DateTime? @db.Timestamp(0)
 
-  sale               sale            @relation(fields: [saleId], references: [id])
-  product_variant    product_variant @relation(fields: [product_variant_id], references:[id])
+  sale            sale            @relation(fields: [saleId], references: [id])
+  product_variant product_variant @relation(fields: [product_variant_id], references: [id])
 
 }
 
@@ -159,10 +156,48 @@ model arbitrary_stock_change {
 }
 
 model debt {
-   id Int @id     @default(autoincrement())
-   saleId Int 
-   amount Decimal @db.Decimal()
-   paid   Int @db.TinyInt() @default(0)
+  id        Int       @id @default(autoincrement())
+  saleId    Int
+  amount    Decimal   @db.Decimal(65, 30)
+  paid      Int       @default(0) @db.TinyInt
+  paid_date DateTime? @db.Timestamp(0)
+  createdAt DateTime? @db.Timestamp(0)
 
-   sale   sale @relation(fields: [saleId], references: [id])
+  sale      sale      @relation(fields: [saleId], references: [id])
+}
+
+model bank {
+  id                 Int    @id @default(autoincrement())
+  bank_name          String @db.VarChar(255)
+  number             String @db.VarChar(25)
+  type               String @db.VarChar(50)
+  owner_name         String @db.VarChar(255)
+  owner_cedula       String @db.VarChar(255)
+  owner_phone_number String @db.VarChar(11)
+  createdAt          DateTime? @db.Timestamp(0)
+
+  payment payment[]
+}
+
+model payment_method {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  status    Int       @default(1) @db.TinyInt
+  createdAt DateTime? @db.Timestamp(0)
+  payment   payment[]
+}
+
+model payment {
+  id                Int       @id @default(autoincrement())
+  payment_method_id Int
+  sale_id           Int
+  amount            Decimal   @db.Decimal(65, 30)
+  currency          String    @db.VarChar(20)
+  transaction_code  String?   @db.VarChar(255)
+  bank_id           Int?
+  createdAt         DateTime? @db.Timestamp(0)
+
+  sale           sale?           @relation(fields: [sale_id], references: [id])
+  payment_method payment_method? @relation(fields: [payment_method_id], references: [id])
+  bank           bank?           @relation(fields: [bank_id], references: [id])
 }

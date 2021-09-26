@@ -7,6 +7,16 @@ const groupArrayBy = (array, key) => {
     }, {});
 };
 
+const convertArrayToObject = (array, key) => {
+    return array.reduce((acc, obj) => {
+        const property = obj[key];
+        acc[property] = acc[property] || [];
+        acc[property] = obj;
+        return acc;
+    }, {});
+};
+
 module.exports = {
     groupArrayBy,
+    convertArrayToObject,
 };

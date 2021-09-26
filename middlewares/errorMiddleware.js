@@ -39,18 +39,18 @@ const GET_ERROR = {
             message: `No se puede eliminar un ${modelA} porque está en relación con ${modelB}`,
         };
     },
-    VALIDATION_ERROR: () => {
+    VALIDATION_ERROR: (error) => {
         return {
-            message: 'El argumento tiene un valor inválido',
+            message: error.message,
         };
     },
 };
+
 const errorMiddleware = (error, req, res, next) => {
     const unknownError = {
         message: 'Error desconocido...',
         ...error,
     };
-    console.log(error);
 
     if (error instanceof PrismaClientValidationError) {
         error.code = 'VALIDATION_ERROR';

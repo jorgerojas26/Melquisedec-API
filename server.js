@@ -14,6 +14,7 @@ const product_variant_routes = require('./routes/product_variant');
 const currencyRate_routes = require('./routes/currencyRate');
 const supplying_routes = require('./routes/supplying');
 const sale_routes = require('./routes/sale');
+const payment_method_routes = require('./routes/paymentMethod');
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
@@ -41,6 +42,7 @@ app.use('/api/product_variants', product_variant_routes);
 app.use('/api/currencyRates', currencyRate_routes);
 app.use('/api/supplyings', supplying_routes);
 app.use('/api/sales', sale_routes);
+app.use('/api/payment-methods', payment_method_routes);
 
 app.use(errorMiddleware);
 

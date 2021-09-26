@@ -1,4 +1,4 @@
-exports.GET_PAGINATED_RESOURCE = async ({ model, queryFilters, paginationConfig, include, select }) => {
+exports.GET_PAGINATED_RESOURCE = async ({ model, queryFilters, paginationConfig, include, select, orderBy }) => {
     let { skip, take } = paginationConfig;
 
     let recordsTotal = await model.count(queryFilters);
@@ -8,7 +8,7 @@ exports.GET_PAGINATED_RESOURCE = async ({ model, queryFilters, paginationConfig,
         ...queryFilters,
         skip,
         take,
-        orderBy: { id: 'desc' },
+        orderBy: orderBy || { id: 'desc' },
         include,
         select,
     });

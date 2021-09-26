@@ -3,13 +3,17 @@ const prisma = new PrismaClient();
 
 const filterHandler = require('./filter');
 
-const fetch_currency_rates = async (queryFilters = {}) => {
+const fetch_currency_rates = async (queryFilters = {}, getAsArray = false) => {
     const records = await prisma.currency_rate.findMany({ ...queryFilters });
     const rates_object = records.reduce(
         (acc, record) => ((acc[record.currency] = { id: record.id, value: Number(record.value), rounding: record.rounding }), acc),
         {}
     );
-    return rates_object;
+    if (getAsArray) {
+        return records;
+    } else {
+        return rates_object;
+    }
 };
 
 const GET_CURRENCY_RATES = async (req, res, next) => {
