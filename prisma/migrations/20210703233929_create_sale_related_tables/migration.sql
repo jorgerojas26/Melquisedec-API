@@ -1,8 +1,8 @@
 CREATE TABLE `sale` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `clientId` INTEGER,
-    `totalAmount` DECIMAL(19, 4) NOT NULL,
-    `status` TINYINT(1) NOT NULL DEFAULT 0,
+    `totalAmount` DECIMAL(65, 30) NOT NULL,
+    `status` TINYINT(1) NOT NULL DEFAULT 1,
     `createdAt` TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP(0),
 
     PRIMARY KEY (`id`),

@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../prisma');
+
 const {
     setImagePath,
     productExists,
@@ -21,7 +21,7 @@ const GET_PRODUCTS = async (req, res, next) => {
         queryFilters.where = filterHandler(filter);
     }
     try {
-        const currencyRates = await prisma.currency_rate.findMany();
+        //const currencyRates = await prisma.currency_rate.findMany();
 
         let { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
             model: prisma.product,
@@ -30,7 +30,7 @@ const GET_PRODUCTS = async (req, res, next) => {
             include: { product_variant: true },
         });
 
-        records = SET_ALL_CURRENCY_PRICES({ products: records.product_variant, currencyRates });
+        //records = SET_ALL_CURRENCY_PRICES({ products: records.product_variant, currencyRates });
 
         const response = { records: [...records], recordsTotal, pageCount };
         res.status(200).json(response);
@@ -59,6 +59,12 @@ const CREATE_PRODUCT = async (req, res, next) => {
     variantsWithImage = JSON.parse(variantsWithImage);
     product_variant = setImagePath(variantsWithImage, product_variant, req);
 
+    product_variant = product_variant.map((variant) => {
+        variant.price = 0;
+        variant.profitPercent = 30;
+        return variant;
+    });
+
     try {
         const response = await prisma.product.create({
             data: { name, brand, product_variant: { create: product_variant } },
@@ -74,7 +80,6 @@ const UPDATE_PRODUCT = async (req, res, next) => {
     id = parseInt(id);
 
     let { name, brand, variantsWithImage, product_variant, reasons } = req.body;
-    console.log(req.body);
     product_variant = JSON.parse(product_variant);
     variantsWithImage = JSON.parse(variantsWithImage);
     product_variant = setImagePath(variantsWithImage, product_variant, req);

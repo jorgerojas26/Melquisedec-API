@@ -46,7 +46,6 @@ CREATE TRIGGER `updateIfExistsDebtOnInsert`
                     SET paid = 1,
                     paid_date = CURRENT_TIMESTAMP(0)
                     WHERE debt.saleId = NEW.sale_id;
-                ELSE 
                 END IF;
         END IF;
     END;

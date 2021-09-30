@@ -1,4 +1,4 @@
-const { CONVERT_PRICE_TO_CURRENCY_RATE } = require('../../utils/product');
+const { CONVERT_AMOUNT_TO_CURRENCY_RATE, CONVERT_PRICE_TO_CURRENCY_RATE } = require('../../utils/product');
 
 const CONVERT_AMOUNTS_TO_CURRENCY_RATE = ({ sales, currencyRates }) => {
     return sales.map((sale) => {
@@ -8,7 +8,7 @@ const CONVERT_AMOUNTS_TO_CURRENCY_RATE = ({ sales, currencyRates }) => {
             sale = { ...sale, converted_amount: { ...sale.converted_price, ...amount } };
 
             if (sale.debt) {
-                const debtAmount = CONVERT_PRICE_TO_CURRENCY_RATE(sale.debt.amount, rate.currency, rate.value, rate.rounding);
+                const debtAmount = CONVERT_PRICE_TO_CURRENCY_RATE(sale.debt.current_amount, rate.currency, rate.value, rate.rounding);
                 sale.debt = { ...sale.debt, converted_amount: { ...sale.debt.converted_amount, ...debtAmount } };
             }
         });

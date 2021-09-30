@@ -39,6 +39,11 @@ const GET_ERROR = {
             message: `No se puede eliminar un ${modelA} porque está en relación con ${modelB}`,
         };
     },
+    P2010: (error) => {
+        return {
+            message: error.message,
+        };
+    },
     VALIDATION_ERROR: (error) => {
         return {
             message: error.message,
@@ -47,6 +52,7 @@ const GET_ERROR = {
 };
 
 const errorMiddleware = (error, req, res, next) => {
+    console.log(error);
     const unknownError = {
         message: 'Error desconocido...',
         ...error,

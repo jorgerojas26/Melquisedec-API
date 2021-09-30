@@ -8,7 +8,4 @@ module.exports = [
     {
         name: 'POS',
     },
-    {
-        name: 'Paypal',
-    },
 ];

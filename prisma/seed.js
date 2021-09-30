@@ -15,7 +15,7 @@ async function main() {
     await createCategories();
     await createCurrencyRates();
     await createProducts();
-    await createSales();
+    //await createSales();
     await createPaymentMethods();
 }
 

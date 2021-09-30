@@ -104,14 +104,14 @@ model currency_rate {
   id       Int     @id @default(autoincrement())
   currency String  @unique @db.VarChar(20)
   value    Decimal @db.Decimal(19, 4)
-  rounding Int     @default(1)
+  rounding Float?    
 }
 
 model sale {
   id            Int                  @id @default(autoincrement())
   clientId      Int?
-  totalAmount   Decimal              @db.Decimal(19, 4)
-  status        Int                  @default(0) @db.TinyInt
+  totalAmount   Decimal              @db.Decimal(65, 30)
+  status        Int                  @default(1) @db.TinyInt
   createdAt     DateTime?            @db.Timestamp(0)
   currencyRates sale_currency_rate[]
   products      sale_product[]
@@ -156,24 +156,25 @@ model arbitrary_stock_change {
 }
 
 model debt {
-  id        Int       @id @default(autoincrement())
-  saleId    Int
-  amount    Decimal   @db.Decimal(65, 30)
-  paid      Int       @default(0) @db.TinyInt
-  paid_date DateTime? @db.Timestamp(0)
-  createdAt DateTime? @db.Timestamp(0)
+  id              Int       @id @default(autoincrement())
+  saleId          Int
+  original_amount Decimal   @db.Decimal(65, 30)
+  current_amount  Decimal   @db.Decimal(65, 30)
+  paid            Int       @default(0) @db.TinyInt
+  paid_date       DateTime? @db.Timestamp(0)
+  createdAt       DateTime? @db.Timestamp(0)
 
-  sale      sale      @relation(fields: [saleId], references: [id])
+  sale sale @relation(fields: [saleId], references: [id])
 }
 
 model bank {
-  id                 Int    @id @default(autoincrement())
-  bank_name          String @db.VarChar(255)
-  number             String @db.VarChar(25)
-  type               String @db.VarChar(50)
-  owner_name         String @db.VarChar(255)
-  owner_cedula       String @db.VarChar(255)
-  owner_phone_number String @db.VarChar(11)
+  id                 Int       @id @default(autoincrement())
+  bank_name          String    @db.VarChar(255)
+  number             String    @db.VarChar(25)
+  type               String    @db.VarChar(50)
+  owner_name         String    @db.VarChar(255)
+  owner_cedula       String    @db.VarChar(255)
+  owner_phone_number String    @db.VarChar(11)
   createdAt          DateTime? @db.Timestamp(0)
 
   payment payment[]

@@ -17,7 +17,7 @@ CREATE TABLE `currency_rate` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `currency` VARCHAR(20) NOT NULL,
     `value` DECIMAL(19, 4) NOT NULL,
-    `rounding` INTEGER NOT NULL DEFAULT 1,
+    `rounding` FLOAT, 
 
     UNIQUE INDEX `currency_rate.currency_unique`(`currency`),
     PRIMARY KEY (`id`)

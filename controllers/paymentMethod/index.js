@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../prisma');
 
 const filterHandler = require('./filters');
 const { GET_PAGINATED_RESOURCE } = require('../../utils/fetchPaginated');
