@@ -23,6 +23,7 @@ prisma.$use(async (params, next) => {
                 [].concat(obj).map((product_variant) => {
                     product_variant.converted_price = CONVERT_FROM_USD_TO_ALL_CURRENCIES(product_variant.price, currency_rates_price_array);
                     product_variant.name = SET_PRODUCT_FULL_NAME(product_variant);
+                    console.log(product_variant.name, product_variant.converted_price, product_variant.price);
                     product_variant.price = Number(product_variant.price);
                     product_variant.profitPercent = Number(product_variant.profitPercent);
                     product_variant.unitValue = Number(product_variant.unitValue);

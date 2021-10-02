@@ -126,7 +126,7 @@ model sale_currency_rate {
   saleId    Int
   currency  String    @db.VarChar(20)
   value     Decimal   @db.Decimal(19, 4)
-  rounding  Int       @default(1)
+  rounding  Float?       
   createdAt DateTime? @db.Timestamp(0)
 
   sale sale @relation(fields: [saleId], references: [id])

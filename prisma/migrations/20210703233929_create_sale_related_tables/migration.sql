@@ -14,7 +14,7 @@ CREATE TABLE `sale_currency_rate` (
     `saleId` INTEGER NOT NULL,
     `currency` VARCHAR(20) NOT NULL,
     `value` DECIMAL(19, 4) NOT NULL,
-    `rounding` INTEGER NOT NULL DEFAULT 1,
+    `rounding` FLOAT,
     `createdAt` TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP(0),
 
     PRIMARY KEY (`id`),

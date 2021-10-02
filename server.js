@@ -16,6 +16,7 @@ const supplying_routes = require('./routes/supplying');
 const sale_routes = require('./routes/sale');
 const payment_method_routes = require('./routes/paymentMethod');
 const debt_routes = require('./routes/debt');
+const report_routes = require('./routes/report');
 
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
@@ -47,6 +48,7 @@ app.use('/api/supplyings', supplying_routes);
 app.use('/api/sales', sale_routes);
 app.use('/api/payment-methods', payment_method_routes);
 app.use('/api/debts', debt_routes);
+app.use('/api/reports', report_routes);
 
 app.use(errorMiddleware);
 
