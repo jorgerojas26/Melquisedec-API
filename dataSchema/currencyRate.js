@@ -10,9 +10,7 @@ const schema = Joi.object().keys({
     value: Joi.number().required().min(0).messages({
         'number.empty': 'El campo valor es requerido',
     }),
-    rounding: Joi.number().required().messages({
-        'number.empty': 'El campo redondeo es requerido',
-    }),
+    rounding: Joi.number().allow(null),
 });
 
 module.exports = schema;

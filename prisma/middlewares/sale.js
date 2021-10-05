@@ -28,6 +28,7 @@ prisma.$use(async (params, next) => {
     ) {
         return [].concat(results).map((result) => {
             let sale_object_container = FIND_OBJECT_TO_MODIFY(params, result, 'sale');
+
             [].concat(sale_object_container).map((obj) => {
                 [].concat(obj).map((sale) => {
                     const currency_rates = sale.currencyRates;

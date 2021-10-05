@@ -11,11 +11,6 @@ const GET_DEBTS = async (req, res, next) => {
         queryFilters.where = filterHandler(filter);
     }
 
-    queryFilters.where = {
-        ...queryFilters.where,
-        paid: 0,
-    };
-
     let { records, recordsTotal, pageCount } = await GET_PAGINATED_RESOURCE({
         model: prisma.debt,
         queryFilters,
@@ -27,6 +22,7 @@ const GET_DEBTS = async (req, res, next) => {
                     products: { include: { product_variant: { include: { product: true } } } },
                     payment: { include: { payment_method: true } },
                     currencyRates: true,
+                    debt: true,
                 },
             },
         },

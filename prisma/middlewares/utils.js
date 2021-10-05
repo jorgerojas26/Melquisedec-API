@@ -22,6 +22,11 @@ const FIND_OBJECT_TO_MODIFY = (params, object_to_search, key) => {
     let actual_object = null;
     if (params.model === key) {
         actual_object = object_to_search;
+
+        const found = FIND_OBJECT_BY_KEY(object_to_search, key);
+        if (found.length) {
+            actual_object = [...found, actual_object];
+        }
     } else {
         actual_object = FIND_OBJECT_BY_KEY(object_to_search, key);
         actual_object = actual_object && actual_object[key] ? actual_object[key] : actual_object;

@@ -5,7 +5,7 @@ CREATE TABLE `debt` (
     `original_amount` DECIMAL(65, 30) NOT NULL,
     `current_amount` DECIMAL(65, 30) NOT NULL,
     `paid` TINYINT NOT NULL DEFAULT 0,
-    `paid_date` TIMESTAMP(0), 
+    `paid_date` DATETIME,
     `createdAt` TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP(0),
 
     PRIMARY KEY (`id`),

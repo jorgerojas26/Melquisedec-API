@@ -2,9 +2,6 @@ const prisma = require('../../prisma');
 
 const filterHandler = require('./filters');
 const { GET_PAGINATED_RESOURCE } = require('../../utils/fetchPaginated');
-const { CONVERT_AMOUNTS_TO_CURRENCY_RATE } = require('./utils');
-const { SET_ALL_CURRENCY_PRICES } = require('../../utils/product');
-const { CONVERT_AMOUNT_TO_ALL_CURRENCIES } = require('../../utils/product');
 
 const GET_CLIENTS = async (req, res, next) => {
     let { filter } = req.query;

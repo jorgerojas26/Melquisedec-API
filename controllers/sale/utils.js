@@ -21,7 +21,7 @@ const calculate_payment_total = (paymentsArray = [], currency_rates) => {
             const rate = currency_rates['PAYMENT_VES'];
             payment_total += payment.amount * rate.value;
         } else {
-            payment_total = +payment.amount;
+            payment_total += payment.amount;
         }
     });
 
@@ -32,13 +32,9 @@ const calculate_paying_debt_total = (paying_debts_array) => {
     let total = 0;
     paying_debts_array.forEach((sale) => {
         const sale_currency_rates = convertArrayToObject(sale.currencyRates, 'currency');
-        const debt_sale_system_currency_rate = sale.currencyRates.filter((rate) => rate.currency === 'PRODUCT_USD')[0];
+        const price_currency_rate = sale.currencyRates.filter((rate) => rate.currency === 'PRICE_VES')[0];
 
-        const debt_sale_total = calculate_sale_total(
-            sale.products,
-            debt_sale_system_currency_rate.value,
-            debt_sale_system_currency_rate.rounding
-        );
+        const debt_sale_total = calculate_sale_total(sale.products, price_currency_rate.value, price_currency_rate.rounding);
         const debt_sale_payment_total = calculate_payment_total(sale.payment, sale_currency_rates);
         console.log('Debt sale total payment: ', debt_sale_payment_total);
         console.log('Debt sale total: ', debt_sale_total);
@@ -65,7 +61,7 @@ const get_higher_payment = (paymentsArray, currencyRates) => {
             if (current.currency === 'VES') {
                 amount = current.amount;
             } else if (current.currency === 'USD') {
-                amount = CONVERT_TO_VES(current.amount, currencyRates['PAYMENT_USD'].value);
+                amount = CONVERT_TO_VES(current.amount, currencyRates['PAYMENT_VES'].value);
             }
             return amount > prev.amount ? current : prev;
         },

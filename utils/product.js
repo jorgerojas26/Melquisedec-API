@@ -4,7 +4,6 @@ const CONVERT_PRICE_TO_CURRENCY_RATE = (price, currency, rate_value, rounding) =
     };
 };
 
-
 const CONVERT_PAYMENT_TO_CURRENCY_RATE = (amount, rate_value) => {
     return amount * rate_value;
 };
