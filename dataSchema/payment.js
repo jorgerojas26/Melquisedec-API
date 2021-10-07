@@ -1,4 +1,4 @@
-const Joi = require('Joi');
+const Joi = require('joi');
 
 const schema = Joi.object().keys({
     saleId: Joi.number().required().messages({ 'number.empty': 'Debe proveer el ID de la venta' }),
