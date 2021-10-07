@@ -93,6 +93,7 @@ const CREATE_SALE = async (req, res, next) => {
             }
         }
 
+        /*
         let paying_debt_total = 0;
         let debt_payment_schema = [];
 
@@ -147,6 +148,7 @@ const CREATE_SALE = async (req, res, next) => {
                 debt_payment_schema.push(sale_object);
             });
         }
+         */
 
         const sale_products_schema = map_products_to_database_schema(databaseProducts, products);
 
@@ -189,10 +191,9 @@ const CREATE_SALE = async (req, res, next) => {
             }
         }
 
-        const transaction = await prisma.$transaction([...debt_payment_schema, prisma.sale.create({ data })]);
+        const response = await prisma.sale.create({ data });
 
-        console.log(transaction);
-        res.status(200).json(transaction);
+        res.status(200).json(response);
     } catch (error) {
         console.error(error);
         next(error);

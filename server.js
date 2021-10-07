@@ -54,6 +54,11 @@ app.use('/api/payments', payment_routes);
 
 app.use(errorMiddleware);
 
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('/*', function (request, response) {
+    response.sendFile(path.resolve(__dirname, 'client/build', 'index.html'));
+});
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server running in port: ' + process.env.PORT || 5000);
 });

@@ -11,10 +11,10 @@ const prisma = new PrismaClient();
 
 async function main() {
     await createUsers();
-    await createClients();
+    //await createClients();
     await createCategories();
     await createCurrencyRates();
-    await createProducts();
+    //await createProducts();
     //await createSales();
     await createPaymentMethods();
 }

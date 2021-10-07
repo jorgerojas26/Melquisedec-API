@@ -15,7 +15,7 @@ module.exports = function (schema) {
                     path: detail.path[0],
                 };
             });
-            next({ error: errorMessage, code: 'SCHEMA_VALIDATION' });
+            next({ error: errorMessage, code: 'SCHEMA_VALIDATION', statusCode: '422' });
         }
     };
 };

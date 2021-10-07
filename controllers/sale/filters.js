@@ -36,6 +36,15 @@ const filterHandler = (filter) => {
                     },
                 },
             },
+            {
+                payment: {
+                    some: {
+                        transaction_code: {
+                            contains: filter,
+                        },
+                    },
+                },
+            },
         ],
     };
 

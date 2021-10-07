@@ -36,3 +36,5 @@ const schema = Joi.object().keys({
         .required()
         .messages({ 'alternatives.match': 'La información de pago es incorrecta' }),
 });
+
+module.exports = schema;
