@@ -42,14 +42,14 @@ const GET_SALE_REPORT = async (req, res, next) => {
             INNER JOIN product on product.id = product_variant.productId
             WHERE DATE(sale.createdAt) BETWEEN ${from} AND ${to}
             GROUP BY product_variant.id
-            ORDER BY totalSold ASC
-            LIMIT 10
+            ORDER BY totalSold DESC
+            LIMIT 5
         `;
 
         const payment_report = await prisma.$queryRaw`
             SELECT
-            payment_method.name,
-            ROUND(SUM(payment.amount), 2) as amount,
+            CASE WHEN payment_method.name = 'Cash' THEN 'Efectivo' ELSE payment_method.name END as name,
+            ROUND(SUM(CASE WHEN payment.amount > 0 THEN payment.amount ELSE 0 END), 2) as amount,
             COUNT(payment.id) as usedCount,
             payment.currency
             FROM
