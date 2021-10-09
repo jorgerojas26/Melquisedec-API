@@ -15,7 +15,7 @@ const GET_SALE_REPORT = async (req, res, next) => {
             SELECT 
             product_variant.id,
             product_variant.name as product,
-            SUM(sale_product.quantity) as quantity,
+            ROUND(SUM(sale_product.quantity), 3) as quantity,
             ROUND(SUM(sale_product.price * sale_product.quantity), 4) as rawProfitUSD,
             ROUND(SUM(sale_product.price * sale_product.quantity * price_currency_rate.value), 2) as rawProfitVES,
             ROUND(SUM(sale_product.price * (sale_product.profitPercent / 100) * sale_product.quantity), 4) as netProfitUSD,
@@ -134,6 +134,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN sale ON sale.clientId = client.id
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
         `;
 
@@ -149,6 +150,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             WHERE DATE(sale.createdAt) BETWEEN CURRENT_DATE() - INTERVAL 30 DAY AND CURRENT_DATE()
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
 
         `;
@@ -165,6 +167,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             WHERE DATE(sale.createdAt) BETWEEN CURRENT_DATE() - INTERVAL 7 DAY AND CURRENT_DATE()
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
         `;
 
@@ -180,6 +183,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             WHERE DATE(sale.createdAt) BETWEEN CURRENT_DATE() AND CURRENT_DATE() + INTERVAL 1 DAY
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
         `;
 
@@ -195,6 +199,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN debt ON debt.saleId = sale.id
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
         `;
 
@@ -211,6 +216,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             WHERE DATE(debt.createdAt) BETWEEN CURRENT_DATE() - INTERVAL 30 DAY AND CURRENT_DATE()
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
         `;
 
@@ -227,6 +233,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             WHERE DATE(debt.createdAt) BETWEEN CURRENT_DATE() - INTERVAL 7 DAY AND CURRENT_DATE()
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
         `;
 
@@ -243,6 +250,7 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
             INNER JOIN sale_currency_rate ON sale_currency_rate.saleId = sale.id AND sale_currency_rate.currency = 'PAYMENT_VES'
             WHERE DATE(debt.createdAt) BETWEEN CURRENT_DATE() AND CURRENT_DATE() + INTERVAL 1 DAY
             GROUP BY client.id
+            ORDER BY total DESC
             LIMIT 5
         `;
 
