@@ -14,7 +14,7 @@ const GET_SALE_REPORT = async (req, res, next) => {
         const sale_report = await prisma.$queryRaw`
             SELECT 
             product_variant.id,
-            CONCAT(product.name, ' ', product.brand, ' ',  product_variant.name) as product,
+            product_variant.name as product,
             SUM(sale_product.quantity) as quantity,
             ROUND(SUM(sale_product.price * sale_product.quantity), 4) as rawProfitUSD,
             ROUND(SUM(sale_product.price * sale_product.quantity * price_currency_rate.value), 2) as rawProfitVES,
@@ -33,7 +33,7 @@ const GET_SALE_REPORT = async (req, res, next) => {
 
         const top_sell_products = await prisma.$queryRaw`
             SELECT
-            CONCAT(product.name, ' ', product.brand, ' ',  product_variant.name) as product,
+            product_variant.name as product,
             SUM(sale_product.quantity) as totalSold
             FROM
             sale
@@ -55,6 +55,7 @@ const GET_SALE_REPORT = async (req, res, next) => {
             FROM
             payment
             INNER JOIN payment_method ON payment_method.id = payment.payment_method_id
+            INNER JOIN sale ON sale.id = payment.sale_id AND sale.status = 1
             WHERE DATE(payment.createdAt) BETWEEN ${from} AND ${to}
             GROUP BY payment.payment_method_id, payment.currency
         `;

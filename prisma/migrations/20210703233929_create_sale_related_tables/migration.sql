@@ -47,3 +47,4 @@ CREATE TRIGGER `subtractProductStockOnInsert`
     UPDATE `product_variant`
     SET stock = stock - NEW.quantity
     WHERE id = NEW.product_variant_id;
+

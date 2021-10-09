@@ -62,6 +62,7 @@ const CREATE_PRODUCT = async (req, res, next) => {
     product_variant = product_variant.map((variant) => {
         variant.price = 0;
         variant.profitPercent = 30;
+        variant.name = `${name} ${brand} ${variant.name}`;
         return variant;
     });
 
