@@ -49,7 +49,7 @@ const GET_SALE_REPORT = async (req, res, next) => {
         const payment_report = await prisma.$queryRaw`
             SELECT
             CASE WHEN payment_method.name = 'Cash' THEN 'Efectivo' ELSE payment_method.name END as name,
-            ROUND(SUM(CASE WHEN payment.amount > 0 THEN payment.amount ELSE 0 END), 2) as amount,
+            ROUND(SUM(payment.amount), 2) as amount,
             COUNT(payment.id) as usedCount,
             payment.currency
             FROM
