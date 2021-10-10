@@ -65,6 +65,7 @@ model product_variant {
 
   supplying    supplying[]
   sale_product sale_product[]
+  arbitrary_stock_change arbitrary_stock_change[]
 }
 
 model product_variant_log {
@@ -153,6 +154,8 @@ model arbitrary_stock_change {
   new_stock          Decimal   @db.Decimal(10, 4)
   reasons            String    @db.VarChar(255)
   createdAt          DateTime? @db.Timestamp(0)
+
+  product_variant product_variant @relation(fields: [product_variant_id], references: [id])
 }
 
 model debt {
