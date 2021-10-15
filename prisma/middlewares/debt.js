@@ -12,9 +12,7 @@ prisma.$use(async (params, next) => {
         const currency_rates = await prisma.currency_rate.findMany();
         const currency_rates_payment_array = currency_rates.filter((r) => r.currency.startsWith('PAYMENT'));
         return [].concat(results).map((result) => {
-            console.log(FIND_OBJECT_BY_KEY(result, 'debt'));
             let debt_object_container = FIND_OBJECT_TO_MODIFY(params, result, 'debt');
-            console.log(debt_object_container);
 
             [].concat(debt_object_container).map((obj) => {
                 [].concat(obj).map((debt) => {

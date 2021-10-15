@@ -46,6 +46,7 @@ const fetch_paginated_product_variants = async ({ queryFilters = {}, paginationC
                 },
             },
         },
+        orderBy: [{ createdAt: 'asc' }],
     });
 
     //records = convertMySQLDecimalToNumber(records);

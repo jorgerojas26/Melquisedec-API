@@ -1,5 +1,20 @@
 const prisma = require('../../prisma');
 
+const MONTHS = {
+    Enero: 1,
+    Febrero: 2,
+    Marzo: 3,
+    Abril: 4,
+    Mayo: 5,
+    Junio: 6,
+    Julio: 7,
+    Agosto: 8,
+    Septiembre: 9,
+    Octubre: 10,
+    Noviembre: 11,
+    Diciembre: 12,
+};
+
 const GET_SALE_REPORT = async (req, res, next) => {
     let { from, to } = req.query;
     from = new Date(from);
@@ -29,6 +44,7 @@ const GET_SALE_REPORT = async (req, res, next) => {
             INNER JOIN sale_currency_rate as price_currency_rate ON price_currency_rate.saleId = sale.id AND price_currency_rate.currency = 'PRICE_VES'
             WHERE DATE(sale.createdAt) BETWEEN ${from} AND ${to}
             GROUP BY product_variant.id
+            ORDER BY netProfitUSD DESC
         `;
 
         const top_sell_products = await prisma.$queryRaw`
@@ -98,6 +114,7 @@ const GET_SALE_REPORT = async (req, res, next) => {
             client.*,
             debt.original_amount,
             debt.current_amount,
+            debt.createdAt,
             debt.paid_date
             FROM
             debt
@@ -274,7 +291,120 @@ const GET_TOP_CLIENTS = async (req, res, next) => {
     }
 };
 
+const GET_PRODUCT_COST_FLUCTUATION = async (req, res, next) => {
+    const { productId } = req.params;
+
+    try {
+        let response = await prisma.$queryRaw`
+            SELECT
+               product_variant.name as product,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 1, supplying.buyPrice, NULL)), 2)  AS Enero,
+               COUNT(IF(MONTH(supplying.createdAt) = 1, supplying.id, NULL))  AS Enero_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 2, supplying.buyPrice, NULL)), 2)  AS Febrero,
+               COUNT(IF(MONTH(supplying.createdAt) = 2, supplying.id, NULL))  AS Febrero_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 3, supplying.buyPrice, NULL)), 2)  AS Marzo,
+               COUNT(IF(MONTH(supplying.createdAt) = 3, supplying.id, NULL))  AS Marzo_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 4, supplying.buyPrice, NULL)), 2)  AS Abril,
+               COUNT(IF(MONTH(supplying.createdAt) = 4, supplying.id, NULL))  AS Abril_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 5, supplying.buyPrice, NULL)), 2)  AS Mayo,
+               COUNT(IF(MONTH(supplying.createdAt) = 5, supplying.id, NULL))  AS Mayo_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 6, supplying.buyPrice, NULL)), 2)  AS Junio,
+               COUNT(IF(MONTH(supplying.createdAt) = 6, supplying.id, NULL))  AS Junio_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 7, supplying.buyPrice, NULL)), 2)  AS Julio,
+               COUNT(IF(MONTH(supplying.createdAt) = 7, supplying.id, NULL))  AS Julio_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 8, supplying.buyPrice, NULL)), 2)  AS Agosto,
+               COUNT(IF(MONTH(supplying.createdAt) = 8, supplying.id, NULL))  AS Agosto_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 9, supplying.buyPrice, NULL)), 2) AS Septiembre,
+               COUNT(IF(MONTH(supplying.createdAt) = 9, supplying.id, NULL))  AS Septiembre_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 10, supplying.buyPrice, NULL)), 2) AS Octubre,
+               COUNT(IF(MONTH(supplying.createdAt) = 10, supplying.id, NULL))  AS Octubre_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 11, supplying.buyPrice, NULL)), 2) AS Noviembre,
+               COUNT(IF(MONTH(supplying.createdAt) = 11, supplying.id, NULL))  AS Noviembre_transactions,
+               ROUND(AVG(IF(MONTH(supplying.createdAt) = 12, supplying.buyPrice, NULL)), 2) AS Diciembre,
+               COUNT(IF(MONTH(supplying.createdAt) = 12, supplying.id, NULL))  AS Diciembre_transactions
+            FROM
+            supplying
+            INNER JOIN product_variant ON product_variant.id = supplying.product_variant_id
+            WHERE YEAR(supplying.createdAt) = YEAR(CURRENT_DATE())
+            AND supplying.product_variant_id = ${productId}
+            GROUP BY supplying.id
+        `;
+
+        response = response.reduce(
+            (acc, current) => ({
+                id: current.product,
+                data: Object.keys(MONTHS).map((month) => ({ x: MONTHS[month], y: current[month] }), []),
+            }),
+            {}
+        );
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const GET_PRODUCT_AVERAGE_SALES = async (req, res, next) => {
+    const { productId } = req.params;
+
+    try {
+        const data = await prisma.$queryRaw`
+            SELECT
+            WEEK(sale.createdAt, 1) as week,
+            product_variant.name as product,
+            SUM(sale_product.quantity) as quantity
+            FROM
+            sale
+            INNER JOIN sale_product ON sale_product.saleId = sale.id
+            INNER JOIN product_variant ON product_variant.id = sale_product.product_variant_id AND product_variant.id = ${productId}
+            WHERE DATE(sale.createdAt) BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH) AND CURRENT_DATE()
+            GROUP BY WEEK(sale.createdAt, 1)
+        `;
+
+        let chart_data = {};
+
+        if (data && data.length) {
+            chart_data = {
+                id: data[0].product,
+                data: data.map((d) => ({ x: d.week, y: d.quantity })),
+            };
+        }
+        const response = { data, chart_data };
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const GET_DAILY_SALES = async (req, res, next) => {
+    try {
+        const data = await prisma.$queryRaw`
+            SELECT
+            CONCAT(DAY(sale.createdAt), '/', MONTH(sale.createdAt)) as date,
+            ROUND(SUM(sale.totalAmount), 2) as total
+            FROM
+            sale
+            WHERE DATE(sale.createdAt) BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 2 WEEK) AND CURRENT_DATE()
+            GROUP BY DAY(sale.createdAt)
+        `;
+
+        const chart_data = {
+            id: 'sales',
+            data: data.map((d) => ({ x: d.date, y: d.total })),
+        };
+
+        console.log(chart_data);
+        const response = { data, chart_data };
+
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     GET_SALE_REPORT,
     GET_TOP_CLIENTS,
+    GET_PRODUCT_COST_FLUCTUATION,
+    GET_PRODUCT_AVERAGE_SALES,
+    GET_DAILY_SALES,
 };
