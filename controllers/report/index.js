@@ -350,7 +350,6 @@ const GET_PRODUCT_AVERAGE_SALES = async (req, res, next) => {
         const data = await prisma.$queryRaw`
             SELECT
             WEEK(sale.createdAt, 1) as week,
-            product_variant.name as product,
             SUM(sale_product.quantity) as quantity
             FROM
             sale
@@ -364,7 +363,7 @@ const GET_PRODUCT_AVERAGE_SALES = async (req, res, next) => {
 
         if (data && data.length) {
             chart_data = {
-                id: data[0].product,
+                id: 'average_sales',
                 data: data.map((d) => ({ x: d.week, y: d.quantity })),
             };
         }
@@ -379,7 +378,7 @@ const GET_DAILY_SALES = async (req, res, next) => {
     try {
         const data = await prisma.$queryRaw`
             SELECT
-            CONCAT(DAY(sale.createdAt), '/', MONTH(sale.createdAt)) as date,
+            CONCAT(DAY(MIN(sale.createdAt)), '/', MONTH(MIN(sale.createdAt))) as date,
             ROUND(SUM(sale.totalAmount), 2) as total
             FROM
             sale
