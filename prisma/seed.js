@@ -11,13 +11,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-    await createUsers();
-    //await createClients();
-    await createCategories();
-    await createCurrencyRates();
-    await createProducts();
-    //await createSales();
-    await createPaymentMethods();
     await createMoney();
 }
 
