@@ -81,10 +81,8 @@ const UPDATE_CURRENCY_RATE = async (req, res, next) => {
 const DELETE_CURRENCY_RATE = async (req, res, next) => {
     const { id } = req.params;
     try {
-        if (![0, 1, 2].includes(parseInt(id))) {
-            const response = await prisma.currency_rate.delete({
-                where: { id: parseInt(id) },
-            });
+        if (![0, 1, 2].includes(Number(id))) {
+            const response = await prisma.currency_rate.delete({ where: { id: Number(id) } });
             res.status(200).json(response);
         } else {
             res.status(422).json({ error: { message: 'No se puede eliminar esta moneda del sistema' } });

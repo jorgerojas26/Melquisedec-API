@@ -5,6 +5,7 @@ const createCurrencyRates = require('./seeds/currencyRate');
 const createProducts = require('./seeds/products');
 const createSales = require('./seeds/sales');
 const createPaymentMethods = require('./seeds/payment_methods');
+const createMoney = require('./seeds/money');
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -14,9 +15,10 @@ async function main() {
     //await createClients();
     await createCategories();
     await createCurrencyRates();
-    //await createProducts();
+    await createProducts();
     //await createSales();
     await createPaymentMethods();
+    await createMoney();
 }
 
 main()
