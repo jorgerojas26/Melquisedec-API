@@ -92,7 +92,7 @@ CREATE TRIGGER `updateAmountOnSaleAnulled`
     BEGIN
         DECLARE done INT DEFAULT FALSE;
         DECLARE payment_amount DECIMAL(65,30);
-        DECLARE payment_currency VARCHAR(191) COLLATE utf8mb4_unicode_ci;
+        DECLARE payment_currency VARCHAR(191);
         DECLARE payment_method_id INT;
 
         DECLARE payments CURSOR FOR
