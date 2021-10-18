@@ -22,6 +22,63 @@ CREATE TABLE `money_log` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateIndex
+CREATE UNIQUE INDEX `debt_saleId_unique` ON `debt`(`saleId`);
+
+-- AddForeignKey
+ALTER TABLE `product_variant` ADD CONSTRAINT `product_variant_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `product_variant_log` ADD CONSTRAINT `product_variant_log_old_productId_fkey` FOREIGN KEY (`old_productId`) REFERENCES `product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `product_variant_log` ADD CONSTRAINT `product_variant_log_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `supplying` ADD CONSTRAINT `supplying_supplierId_fkey` FOREIGN KEY (`supplierId`) REFERENCES `supplier`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `supplying` ADD CONSTRAINT `supplying_product_variant_id_fkey` FOREIGN KEY (`product_variant_id`) REFERENCES `product_variant`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `sale` ADD CONSTRAINT `sale_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `sale_currency_rate` ADD CONSTRAINT `sale_currency_rate_saleId_fkey` FOREIGN KEY (`saleId`) REFERENCES `sale`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `sale_product` ADD CONSTRAINT `sale_product_saleId_fkey` FOREIGN KEY (`saleId`) REFERENCES `sale`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `sale_product` ADD CONSTRAINT `sale_product_product_variant_id_fkey` FOREIGN KEY (`product_variant_id`) REFERENCES `product_variant`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `arbitrary_stock_change` ADD CONSTRAINT `arbitrary_stock_change_product_variant_id_fkey` FOREIGN KEY (`product_variant_id`) REFERENCES `product_variant`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `debt` ADD CONSTRAINT `debt_saleId_fkey` FOREIGN KEY (`saleId`) REFERENCES `sale`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `payment` ADD CONSTRAINT `payment_sale_id_fkey` FOREIGN KEY (`sale_id`) REFERENCES `sale`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `payment` ADD CONSTRAINT `payment_payment_method_id_fkey` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `payment` ADD CONSTRAINT `payment_bank_id_fkey` FOREIGN KEY (`bank_id`) REFERENCES `bank`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- RedefineIndex
+CREATE UNIQUE INDEX `client_cedula_key` ON `client`(`cedula`);
+DROP INDEX `client.cedula_unique` ON `client`;
+
+-- RedefineIndex
+CREATE UNIQUE INDEX `currency_rate_currency_key` ON `currency_rate`(`currency`);
+DROP INDEX `currency_rate.currency_unique` ON `currency_rate`;
+
+-- RedefineIndex
+CREATE UNIQUE INDEX `user_username_key` ON `user`(`username`);
+DROP INDEX `user.username_unique` ON `user`;
+
 CREATE TRIGGER `updateAmountOnPaymentInsert`
     AFTER INSERT
     ON `payment` FOR EACH ROW
@@ -35,7 +92,7 @@ CREATE TRIGGER `updateAmountOnSaleAnulled`
     BEGIN
         DECLARE done INT DEFAULT FALSE;
         DECLARE payment_amount DECIMAL(65,30);
-        DECLARE payment_currency VARCHAR(191);
+        DECLARE payment_currency VARCHAR(20);
         DECLARE payment_method_id INT;
 
         DECLARE payments CURSOR FOR
