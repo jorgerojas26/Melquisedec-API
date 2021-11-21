@@ -9,6 +9,29 @@ const GET_ALL_MONEY = async (req, res, next) => {
     }
 };
 
+const GET_MONEY_HISTORY = async (req, res, next) => {
+    try {
+        const response = await prisma.money_log.findMany({
+            select: {
+                id: true,
+                old_amount: true,
+                new_amount: true,
+                reasons: true,
+                createdAt: true,
+                money: {
+                    select: {
+                        currency: true,
+                    },
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const CREATE_MONEY = async (req, res, next) => {
     const { name, amount, currency } = req.body;
 
@@ -57,4 +80,5 @@ module.exports = {
     GET_ALL_MONEY,
     CREATE_MONEY,
     UPDATE_MONEY,
+    GET_MONEY_HISTORY,
 };
